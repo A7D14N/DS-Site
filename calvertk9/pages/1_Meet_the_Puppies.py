@@ -13,12 +13,12 @@ st.set_page_config(
 # ---------------------------------------------------------------------------
 # IMAGE HANDLING
 # Put your photos in the "images" folder next to this file, using these
-# exact names (any of .jpg / .jpeg / .png is fine):
+# exact names (any of .jpg / .jpeg / .png / .webp is fine):
 #   hero.jpg      -> big banner photo (optional)
 #   marley.jpg    -> Marley (mum)
 #   bertie.jpg    -> Bertie (dad)
 #   puppy1.jpg ... puppy7.jpg -> the seven puppies
-# If a file isn't found yet, a soft placeholder box is shown instead, so the
+# If a file isn't found yet, a soft blank box is shown instead, so the
 # site always runs — just drop photos in later and refresh.
 # ---------------------------------------------------------------------------
 
@@ -37,32 +37,32 @@ def find_image(name):
     return None
 
 
-
-def photo_block(name, height=280, radius=22, label=None, width=None):
+def photo_block(name, height=280, radius=22):
+    """Renders a clean, fixed-size photo in a rounded box.
+    Falls back to a plain empty box (no text/paths shown) if the photo
+    hasn't been added yet.
+    """
     path = find_image(name)
-
-    if width is None:
-        width = int(height * 1.6)
 
     if path:
         ext = os.path.splitext(path)[1].lower()
-        mime = "image/jpeg" if ext in {".jpg", ".jpeg"} else "image/png" if ext == ".png" else "image/webp"
+        mime = {
+            ".jpg": "image/jpeg",
+            ".jpeg": "image/jpeg",
+            ".png": "image/png",
+            ".webp": "image/webp",
+        }[ext]
         with open(path, "rb") as f:
             encoded = base64.b64encode(f.read()).decode()
+        img_tag = f'<img src="data:{mime};base64,{encoded}" style="width:100%; height:100%; object-fit:cover; display:block;" />'
+    else:
+        img_tag = ""
 
-        return f"""
-            <div class="photo-box" style="width:{width}px; height:{height}px; border-radius:{radius}px; overflow:hidden;">
-                <img src="data:{mime};base64,{encoded}" alt="{label or name}" style="width:100%; height:100%; object-fit:cover; display:block;" />
-            </div>
-        """
-    return f"""
-            <div class="img-ph" style="height:{height}px; border-radius:{radius}px;">
-                <div class="img-ph-label">
-                    Add images/{name}.jpg<br>
-                    {label or name}
-                </div>
-            </div>
-        """
+    return (
+        f'<div class="photo-box" style="height:{height}px; border-radius:{radius}px;">'
+        f"{img_tag}"
+        f"</div>"
+    )
 
 
 st.markdown("""
@@ -115,13 +115,11 @@ h1,h2,h3,h4{font-family:'Fraunces', serif; letter-spacing:-0.02em;}
 .btn-ghost{display:inline-block; padding:16px 34px; border-radius:999px; font-weight:600; text-decoration:none; font-size:15px; border:1.5px solid var(--text); color:var(--text)!important; transition:all 0.2s ease;}
 .btn-ghost:hover{background:var(--surface-soft); color:#000!important;}
 
-/* Placeholder boxes (shown until a real photo is added) */
-.img-ph{width:100%; display:flex; align-items:center; justify-content:center; height:100%; color:#000; font-weight:600; text-align:center; background:linear-gradient(180deg, #E9E3DA 0%, #F6F1E9 100%); border:1px solid var(--border); position:relative; overflow:hidden;}
+/* Photo boxes — clean rounded box, image fills it, plain background if no image yet */
+.photo-box{width:100%; height:100%; overflow:hidden; background:linear-gradient(180deg, #E9E3DA 0%, #F6F1E9 100%); border:1px solid var(--border);}
+.photo-box img{width:100%; height:100%; object-fit:cover; display:block;}
 
-
-/* Real photo boxes */
 .card{overflow:hidden;}
-.card img{width:100%; height:auto; object-fit:cover; display:block;}
 
 .section{padding:78px 60px;}
 .section-alt{background:var(--surface);}
@@ -147,11 +145,9 @@ h1,h2,h3,h4{font-family:'Fraunces', serif; letter-spacing:-0.02em;}
 .feature-title{font-weight:700; font-size:16px; margin-bottom:6px; color:#000;}
 .feature-desc{color:#000; font-size:14.5px; line-height:1.7;}
 
-.contact-wrap{background:var(--surface); border-radius:28px; padding:56px; color:#000;}
-.contact-wrap h2{color:#000;}
-.contact-wrap p{color:#000;}
-.stButton button{background:var(--accent); color:#000; border:none; border-radius:999px; padding:14px 32px; font-weight:700;}
-.stButton button:hover{background:var(--accent-dark);}
+.contact-simple{text-align:center; padding:20px 0 10px 0;}
+.contact-phone{font-size:16px; margin-top:18px; color:#000;}
+.contact-phone strong{color:#000;}
 
 .footer{padding:44px 60px; text-align:center; color:var(--text-muted); font-size:13.5px; border-top:1px solid var(--border);}
 .footer b{color:var(--text);}
@@ -202,7 +198,7 @@ with col1:
     """, unsafe_allow_html=True)
 
 with col2:
-    photo_block("hero", height=520, label="Hero photo")
+    st.markdown(photo_block("hero", height=520), unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
 
@@ -221,7 +217,7 @@ colM, colB = st.columns(2, gap="large")
 with colM:
     st.markdown(f"""
         <div class="card" style="padding:28px;">
-            {photo_block("marley", height=420, label="Marley")}
+            {photo_block("marley", height=420)}
             <span class="tag">Mum</span>
             <div class="dog-name">Marley</div>
             <div class="dog-meta">A gentle, affectionate mum who has taken wonderful care of her litter.</div>
@@ -232,7 +228,7 @@ with colM:
 with colB:
     st.markdown(f"""
         <div class="card" style="padding:28px;">
-            {photo_block("bertie", height=420, label="Bertie")}
+            {photo_block("bertie", height=420)}
             <span class="tag tag-muted">Dad</span>
             <div class="dog-name">Bertie</div>
             <div class="dog-meta">A friendly, easy-going dad with a lovely temperament.</div>
@@ -278,7 +274,7 @@ for i in range(0, len(puppies), 3):
         with col:
             st.markdown(f"""
                 <div class="card" style="padding:22px;">
-                    {photo_block(p['key'], height=200, radius=16, label=p['name'])}
+                    {photo_block(p['key'], height=200, radius=16)}
                     <div style="margin-top:18px;">
                         <div class="puppy-name">{p['name']}</div>
                         <div class="puppy-meta">{meta}</div>
@@ -320,24 +316,19 @@ for title, desc in features:
 st.markdown('</div>', unsafe_allow_html=True)
 
 # ---------------------------------------------------------------------------
-# CONTACT
+# CONTACT — simple: just a button and a phone number
 # ---------------------------------------------------------------------------
 st.markdown('<div id="contact" class="section section-alt">', unsafe_allow_html=True)
-st.markdown('<div class="contact-wrap">', unsafe_allow_html=True)
 
 st.markdown("""
-    <div class="section-kicker">Contact</div>
-    <h2 style="font-size:32px; margin-bottom:14px;">Ready to reserve a puppy?</h2>
-    <p style="font-size:15px; line-height:1.7; max-width:560px; margin-bottom:26px;">
-        Reach out via email or phone and we'll get back to you quickly.
-    </p>
+<div class="contact-simple">
     <a href="mailto:replacewithrealemail@gmail.com" class="btn-primary" style="display:inline-flex; align-items:center; gap:10px;">
         📧 Contact us
     </a>
-    <p style="font-size:14.5px; margin-top:22px; color:#6D655E;">Or call us directly at <strong>07777777777</strong></p>
+    <div class="contact-phone">Or call us directly at <strong>07777777777</strong></div>
+</div>
 """, unsafe_allow_html=True)
 
-st.markdown('</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown("""
