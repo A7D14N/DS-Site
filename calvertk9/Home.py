@@ -67,12 +67,13 @@ h1,h2,h3,h4{font-family:'Fraunces', serif;}
 .home-hero{
     position:relative;
     width:100%;
-    height:92vh;
+    height:auto;
     min-height:560px;
     display:flex;
     align-items:center;
     justify-content:center;
-    overflow:hidden;
+    overflow:visible;
+    padding:100px 0 120px;
 }
 .home-hero-bg{
     position:absolute;
@@ -139,11 +140,14 @@ h1,h2,h3,h4{font-family:'Fraunces', serif;}
     justify-content:center;
     position:relative;
     z-index:3;
-    margin-top:24px;
-    padding-bottom:40px;
-    background:transparent;
+    margin-top:-62px;
+    width:100%;
 }
-.stButton{display:flex; justify-content:center;}
+.stButton{
+    display:flex;
+    justify-content:center;
+    margin:0 auto;
+}
 .stButton button{
     background:var(--accent);
     color:#000;
