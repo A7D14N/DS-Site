@@ -194,5 +194,5 @@ if not hero_path:
 # ---------------------------------------------------------------------------
 st.markdown('<div class="home-cta-wrap">', unsafe_allow_html=True)
 if st.button("Meet the Pups"):
-    st.switch_page("pages/1_Meet_the_Puppies.py")
+    st.switch_page("1_Meet_the_Puppies")
 st.markdown('</div>', unsafe_allow_html=True)
