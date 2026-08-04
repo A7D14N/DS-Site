@@ -80,6 +80,8 @@ h1,h2,h3,h4{font-family:'Fraunces', serif;}
     width:100%;
     height:100%;
     object-fit:cover;
+    object-position:center;
+    filter:blur(3px) saturate(1.05);
     z-index:0;
 }
 .home-hero-placeholder{
@@ -194,5 +196,5 @@ if not hero_path:
 # ---------------------------------------------------------------------------
 st.markdown('<div class="home-cta-wrap">', unsafe_allow_html=True)
 if st.button("Meet the Pups"):
-    st.switch_page("1_Meet_the_Puppies")
+    st.switch_page("pages/1_Meet_the_Puppies.py")
 st.markdown('</div>', unsafe_allow_html=True)
