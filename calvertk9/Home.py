@@ -79,6 +79,9 @@ h1,h2,h3,h4{font-family:'Fraunces', serif;}
     inset:0;
     width:100%;
     height:100%;
+    min-width:100%;
+    min-height:100%;
+    display:block;
     object-fit:cover;
     object-position:center;
     filter:blur(3px) saturate(1.05);
@@ -136,7 +139,7 @@ h1,h2,h3,h4{font-family:'Fraunces', serif;}
     justify-content:center;
     position:relative;
     z-index:3;
-    margin-top:-110px;
+    margin-top:24px;
     padding-bottom:40px;
     background:transparent;
 }
