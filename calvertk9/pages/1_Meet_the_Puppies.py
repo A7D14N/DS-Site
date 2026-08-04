@@ -120,19 +120,19 @@ h1,h2,h3,h4{font-family:'Fraunces', serif; letter-spacing:-0.02em;}
 .section-title{font-size:36px; font-weight:700; margin-bottom:14px; max-width:680px; color:#000;}
 .section-sub{color:#000; font-size:16px; max-width:620px; line-height:1.68; margin-bottom:18px;}
 
-.card{background:var(--surface); border-radius:24px; padding:24px; border:1px solid var(--border); height:100%; transition:transform 0.2s ease, box-shadow 0.2s ease;}
+.card{background:var(--surface); border-radius:24px; padding:18px; border:1px solid var(--border); height:100%; transition:transform 0.2s ease, box-shadow 0.2s ease;}
 .card:hover{transform:translateY(-4px); box-shadow:0 20px 40px rgba(30,25,20,0.08);}
-.tag{display:inline-block; background:var(--accent); color:#000; font-size:11.5px; font-weight:700; padding:6px 14px; border-radius:999px; letter-spacing:0.03em; margin-bottom:14px;}
+.tag{display:inline-block; background:var(--accent); color:#000; font-size:11px; font-weight:700; padding:5px 12px; border-radius:999px; letter-spacing:0.03em; margin-bottom:12px;}
 .tag-muted{background:var(--surface-soft); color:#000;}
-.dog-name{font-family:'Fraunces', serif; font-size:24px; font-weight:700; margin:16px 0 6px 0; color:#000;}
-.dog-meta{color:#000; font-size:14.5px; margin-bottom:10px; line-height:1.7;}
+.dog-name{font-family:'Fraunces', serif; font-size:22px; font-weight:700; margin:14px 0 6px 0; color:#000;}
+.dog-meta{color:#000; font-size:14px; margin-bottom:10px; line-height:1.65;}
 
-.puppy-grid{display:flex; flex-wrap:wrap; gap:24px; justify-content:center;}
-.puppy-card{flex:0 0 30%; min-width:220px;}
-.puppy-name{font-family:'Fraunces', serif; font-size:19px; font-weight:700; margin:14px 0 4px 0; color:#000;}
-.puppy-meta{color:#000; font-size:13.5px;}
-.badge-available{display:inline-block; background:#DCE8DC; color:#2F5A2F; font-size:11.5px; font-weight:700; padding:4px 12px; border-radius:999px; margin-top:8px;}
-.badge-reserved{display:inline-block; background:#EDE0D3; color:#8E5F35; font-size:11.5px; font-weight:700; padding:4px 12px; border-radius:999px; margin-top:8px;}
+.puppy-grid{display:flex; flex-wrap:wrap; gap:18px; justify-content:center;}
+.puppy-card{flex:0 0 22%; min-width:180px;}
+.puppy-name{font-family:'Fraunces', serif; font-size:17px; font-weight:700; margin:12px 0 4px 0; color:#000;}
+.puppy-meta{color:#000; font-size:13px;}
+.badge-available{display:inline-block; background:#DCE8DC; color:#2F5A2F; font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; margin-top:8px;}
+.badge-reserved{display:inline-block; background:#EDE0D3; color:#8E5F35; font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; margin-top:8px;}
 
 .feature-row{display:flex; gap:16px; margin-bottom:22px; align-items:flex-start;}
 .feature-badge{width:46px; height:46px; border-radius:18px; background:var(--surface-soft); display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--accent-dark);}
@@ -213,7 +213,7 @@ colM, colB = st.columns(2, gap="large")
 with colM:
     with st.container():
         st.markdown('<div class="card">', unsafe_allow_html=True)
-        photo_block("marley", height=220, label="Marley")
+        photo_block("marley", height=200, label="Marley")
         st.markdown("""
             <span class="tag">Mum</span>
             <div class="dog-name">Marley</div>
@@ -225,7 +225,7 @@ with colM:
 with colB:
     with st.container():
         st.markdown('<div class="card">', unsafe_allow_html=True)
-        photo_block("bertie", height=220, label="Bertie")
+        photo_block("bertie", height=200, label="Bertie")
         st.markdown("""
             <span class="tag tag-muted">Dad</span>
             <div class="dog-name">Bertie</div>
@@ -269,8 +269,8 @@ for p in puppies:
 
     with st.container():
         st.markdown('<div class="puppy-card">', unsafe_allow_html=True)
-        st.markdown('<div class="card" style="padding:16px;">', unsafe_allow_html=True)
-        photo_block(p['key'], height=160, radius=16, label=p['name'])
+        st.markdown('<div class="card" style="padding:14px;">', unsafe_allow_html=True)
+        photo_block(p['key'], height=130, radius=16, label=p['name'])
         st.markdown(f"""
             <div class="puppy-name">{p['name']}</div>
             <div class="puppy-meta">{meta}</div>
