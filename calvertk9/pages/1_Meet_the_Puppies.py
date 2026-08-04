@@ -40,7 +40,7 @@ def photo_block(name, height=280, radius=22, label=None):
     path = find_image(name)
 
     if path:
-        st.image(path, use_container_width=True)
+        st.image(path, width=min(height, 260))
     else:
         st.markdown(
             f"""
@@ -194,7 +194,7 @@ with col1:
     """, unsafe_allow_html=True)
 
 with col2:
-    photo_block("hero", height=420, label="Hero photo")
+    photo_block("hero", height=260, label="Hero photo")
 
 st.markdown('</div>', unsafe_allow_html=True)
 
@@ -213,7 +213,7 @@ colM, colB = st.columns(2, gap="large")
 with colM:
     with st.container():
         st.markdown('<div class="card">', unsafe_allow_html=True)
-        photo_block("marley", height=320, label="Marley")
+        photo_block("marley", height=220, label="Marley")
         st.markdown("""
             <span class="tag">Mum</span>
             <div class="dog-name">Marley</div>
@@ -225,7 +225,7 @@ with colM:
 with colB:
     with st.container():
         st.markdown('<div class="card">', unsafe_allow_html=True)
-        photo_block("bertie", height=320, label="Bertie")
+        photo_block("bertie", height=220, label="Bertie")
         st.markdown("""
             <span class="tag tag-muted">Dad</span>
             <div class="dog-name">Bertie</div>
@@ -270,7 +270,7 @@ for p in puppies:
     with st.container():
         st.markdown('<div class="puppy-card">', unsafe_allow_html=True)
         st.markdown('<div class="card" style="padding:16px;">', unsafe_allow_html=True)
-        photo_block(p['key'], height=230, radius=16, label=p['name'])
+        photo_block(p['key'], height=160, radius=16, label=p['name'])
         st.markdown(f"""
             <div class="puppy-name">{p['name']}</div>
             <div class="puppy-meta">{meta}</div>
