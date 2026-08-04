@@ -1,5 +1,4 @@
 import streamlit as st
-import base64
 import os
 
 st.set_page_config(
@@ -36,29 +35,24 @@ def find_image(name):
     return None
 
 
-def image_to_b64(path):
-    with open(path, "rb") as f:
-        return base64.b64encode(f.read()).decode()
-
 
 def photo_block(name, height=280, radius=22, label=None):
-    """Render a photo in a styled rounded box, or a placeholder if missing."""
     path = find_image(name)
+
     if path:
-        ext = os.path.splitext(path)[1].lstrip(".")
-        b64 = image_to_b64(path)
-        return f"""
-        <div class="photo-box" style="height:{height}px; border-radius:{radius}px;">
-            <img src="data:image/{ext};base64,{b64}" alt="{label or name}" />
-        </div>
-        """
+        st.image(path, use_container_width=True)
     else:
-        display_label = label or name.replace("_", " ").title()
-        return f"""
-        <div class="img-ph" style="height:{height}px; border-radius:{radius}px;">
-            <div class="img-ph-label">Add images/{name}.jpg<br>{display_label}</div>
-        </div>
-        """
+        st.markdown(
+            f"""
+            <div class="img-ph" style="height:{height}px; border-radius:{radius}px;">
+                <div class="img-ph-label">
+                    Add images/{name}.jpg<br>
+                    {label or name}
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
 
 st.markdown("""
@@ -200,7 +194,7 @@ with col1:
     """, unsafe_allow_html=True)
 
 with col2:
-    st.markdown(photo_block("hero", height=420, label="Hero photo"), unsafe_allow_html=True)
+    photo_block("hero", height=420, label="Hero photo")
 
 st.markdown('</div>', unsafe_allow_html=True)
 
@@ -217,26 +211,28 @@ st.markdown("""
 colM, colB = st.columns(2, gap="large")
 
 with colM:
-    st.markdown(f"""
-    <div class="card">
-        {photo_block("marley", height=320, radius=18, label="Marley")}
-        <span class="tag">Mum</span>
-        <div class="dog-name">Marley</div>
-        <div class="dog-meta">A gentle, affectionate mum who has taken wonderful care of her litter.</div>
-        <div class="dog-meta"><strong>Health:</strong> Add health testing details here.</div>
-    </div>
-    """, unsafe_allow_html=True)
+    with st.container():
+        st.markdown('<div class="card">', unsafe_allow_html=True)
+        photo_block("marley", height=320, label="Marley")
+        st.markdown("""
+            <span class="tag">Mum</span>
+            <div class="dog-name">Marley</div>
+            <div class="dog-meta">A gentle, affectionate mum who has taken wonderful care of her litter.</div>
+            <div class="dog-meta"><strong>Health:</strong> Add health testing details here.</div>
+        </div>
+        """, unsafe_allow_html=True)
 
 with colB:
-    st.markdown(f"""
-    <div class="card">
-        {photo_block("bertie", height=320, radius=18, label="Bertie")}
-        <span class="tag tag-muted">Dad</span>
-        <div class="dog-name">Bertie</div>
-        <div class="dog-meta">A friendly, easy-going dad with a lovely temperament.</div>
-        <div class="dog-meta"><strong>Health:</strong> Add health testing details here.</div>
-    </div>
-    """, unsafe_allow_html=True)
+    with st.container():
+        st.markdown('<div class="card">', unsafe_allow_html=True)
+        photo_block("bertie", height=320, label="Bertie")
+        st.markdown("""
+            <span class="tag tag-muted">Dad</span>
+            <div class="dog-name">Bertie</div>
+            <div class="dog-meta">A friendly, easy-going dad with a lovely temperament.</div>
+            <div class="dog-meta"><strong>Health:</strong> Add health testing details here.</div>
+        </div>
+        """, unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
 
@@ -261,7 +257,7 @@ puppies = [
     {"key": "puppy7", "name": "Puppy 7", "gender": "", "status": ""},
 ]
 
-cards_html = '<div class="puppy-grid">'
+st.markdown('<div class="puppy-grid">', unsafe_allow_html=True)
 for p in puppies:
     badge = ""
     if p["status"].lower() == "available":
@@ -271,19 +267,19 @@ for p in puppies:
 
     meta = " · ".join([v for v in [p["gender"]] if v])
 
-    cards_html += f"""
-    <div class="puppy-card">
-        <div class="card" style="padding:16px;">
-            {photo_block(p['key'], height=230, radius=16, label=p['name'])}
+    with st.container():
+        st.markdown('<div class="puppy-card">', unsafe_allow_html=True)
+        st.markdown('<div class="card" style="padding:16px;">', unsafe_allow_html=True)
+        photo_block(p['key'], height=230, radius=16, label=p['name'])
+        st.markdown(f"""
             <div class="puppy-name">{p['name']}</div>
             <div class="puppy-meta">{meta}</div>
             {badge}
         </div>
-    </div>
-    """
-cards_html += "</div>"
+        </div>
+        """, unsafe_allow_html=True)
 
-st.markdown(cards_html, unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
 # ---------------------------------------------------------------------------
