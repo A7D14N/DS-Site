@@ -1,5 +1,7 @@
-import streamlit as st
+import base64
 import os
+
+import streamlit as st
 
 st.set_page_config(
     page_title="CalvertK9 — Home-raised Puppies",
@@ -41,8 +43,20 @@ def photo_block(name, height=280, radius=22, label=None, width=None):
 
     if path:
         if width is None:
-            width = int(height * 1.5)
-        st.image(path, width=width)
+            width = int(height * 1.6)
+        ext = os.path.splitext(path)[1].lower()
+        mime = "image/jpeg" if ext in {".jpg", ".jpeg"} else "image/png" if ext == ".png" else "image/webp"
+        with open(path, "rb") as f:
+            encoded = base64.b64encode(f.read()).decode()
+
+        st.markdown(
+            f"""
+            <div class="photo-box" style="width:{width}px; height:{height}px; border-radius:{radius}px; overflow:hidden;">
+                <img src="data:{mime};base64,{encoded}" alt="{label or name}" style="width:100%; height:100%; object-fit:cover; display:block;" />
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
     else:
         st.markdown(
             f"""
@@ -95,11 +109,11 @@ h1,h2,h3,h4{font-family:'Fraunces', serif; letter-spacing:-0.02em;}
 .nav-cta{background:var(--accent); color:#000!important; padding:12px 26px; border-radius:999px; font-weight:600!important;}
 .nav-cta:hover{background:var(--accent-dark)!important;}
 
-.hero-wrap{padding:72px 60px 40px 60px; display:flex; gap:48px; align-items:center; flex-wrap:wrap;}
-.hero-copy{max-width:580px;}
+.hero-wrap{padding:72px 56px 40px 56px; display:flex; gap:64px; align-items:flex-start; flex-wrap:wrap;}
+.hero-copy{max-width:650px;}
 .hero-badge{display:inline-block; background:var(--surface); color:#000; padding:9px 18px; border-radius:999px; font-size:13px; font-weight:600; letter-spacing:0.12em; margin-bottom:20px; border:1px solid var(--border);}
-.hero-title{font-size:54px; line-height:1.04; font-weight:700; margin-bottom:18px; color:#000;}
-.hero-sub{font-size:18px; color:#000; line-height:1.7; margin-bottom:30px;}
+.hero-title{font-size:58px; line-height:1.02; font-weight:700; margin-bottom:18px; color:#000;}
+.hero-sub{font-size:19px; color:#000; line-height:1.7; margin-bottom:30px;}
 .hero-actions{display:flex; flex-wrap:wrap; gap:14px; margin-bottom:8px;}
 
 .btn-primary{display:inline-block; background:var(--accent); color:#000!important; padding:16px 34px; border-radius:999px; font-weight:600; text-decoration:none; font-size:15px; transition:all 0.2s ease;}
@@ -109,12 +123,11 @@ h1,h2,h3,h4{font-family:'Fraunces', serif; letter-spacing:-0.02em;}
 
 /* Placeholder boxes (shown until a real photo is added) */
 .img-ph{width:100%; display:flex; align-items:center; justify-content:center; height:100%; color:#000; font-weight:600; text-align:center; background:linear-gradient(180deg, #E9E3DA 0%, #F6F1E9 100%); border:1px solid var(--border); position:relative; overflow:hidden;}
-.img-ph::before{content:""; position:absolute; inset:0; background:linear-gradient(135deg, rgba(255,255,255,0.45), transparent 50%);}
-.img-ph-label{position:relative; z-index:1; font-size:13px; letter-spacing:0.02em; line-height:1.6; padding:0 20px;}
+
 
 /* Real photo boxes */
-.photo-box{width:100%; overflow:hidden; border:1px solid var(--border);}
-.photo-box img{width:100%; height:100%; object-fit:cover; display:block;}
+.card{overflow:hidden;}
+.card img{width:100%; height:auto; object-fit:cover; display:block;}
 
 .section{padding:78px 60px;}
 .section-alt{background:var(--surface);}
@@ -179,7 +192,7 @@ st.markdown("""
 # HERO
 # ---------------------------------------------------------------------------
 st.markdown('<div class="hero-wrap">', unsafe_allow_html=True)
-col1, col2 = st.columns([1, 0.95], gap="large")
+col1, col2 = st.columns([1.1, 1], gap="large")
 
 with col1:
     st.markdown("""
@@ -196,7 +209,7 @@ with col1:
     """, unsafe_allow_html=True)
 
 with col2:
-    photo_block("hero", height=360, label="Hero photo")
+    photo_block("hero", height=520, label="Hero photo")
 
 st.markdown('</div>', unsafe_allow_html=True)
 
@@ -213,28 +226,26 @@ st.markdown("""
 colM, colB = st.columns(2, gap="large")
 
 with colM:
-    with st.container():
-        st.markdown('<div class="card">', unsafe_allow_html=True)
-        photo_block("marley", height=280, label="Marley")
-        st.markdown("""
-            <span class="tag">Mum</span>
-            <div class="dog-name">Marley</div>
-            <div class="dog-meta">A gentle, affectionate mum who has taken wonderful care of her litter.</div>
-            <div class="dog-meta"><strong>Health:</strong> Add health testing details here.</div>
-        </div>
-        """, unsafe_allow_html=True)
+    st.markdown('<div class="card" style="padding:28px;">', unsafe_allow_html=True)
+    photo_block("marley", height=420, label="Marley")
+    st.markdown("""
+        <span class="tag">Mum</span>
+        <div class="dog-name">Marley</div>
+        <div class="dog-meta">A gentle, affectionate mum who has taken wonderful care of her litter.</div>
+        <div class="dog-meta"><strong>Health:</strong> Add health testing details here.</div>
+    </div>
+    """, unsafe_allow_html=True)
 
 with colB:
-    with st.container():
-        st.markdown('<div class="card">', unsafe_allow_html=True)
-        photo_block("bertie", height=280, label="Bertie")
-        st.markdown("""
-            <span class="tag tag-muted">Dad</span>
-            <div class="dog-name">Bertie</div>
-            <div class="dog-meta">A friendly, easy-going dad with a lovely temperament.</div>
-            <div class="dog-meta"><strong>Health:</strong> Add health testing details here.</div>
-        </div>
-        """, unsafe_allow_html=True)
+    st.markdown('<div class="card" style="padding:28px;">', unsafe_allow_html=True)
+    photo_block("bertie", height=420, label="Bertie")
+    st.markdown("""
+        <span class="tag tag-muted">Dad</span>
+        <div class="dog-name">Bertie</div>
+        <div class="dog-meta">A friendly, easy-going dad with a lovely temperament.</div>
+        <div class="dog-meta"><strong>Health:</strong> Add health testing details here.</div>
+    </div>
+    """, unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
 
@@ -259,30 +270,29 @@ puppies = [
     {"key": "puppy7", "name": "Puppy 7", "gender": "", "status": ""},
 ]
 
-st.markdown('<div class="puppy-grid">', unsafe_allow_html=True)
-for p in puppies:
-    badge = ""
-    if p["status"].lower() == "available":
-        badge = '<span class="badge-available">Available</span>'
-    elif p["status"].lower() == "reserved":
-        badge = '<span class="badge-reserved">Reserved</span>'
+for i in range(0, len(puppies), 3):
+    row = puppies[i:i+3]
+    cols = st.columns(len(row), gap="large")
+    for col, p in zip(cols, row):
+        badge = ""
+        if p["status"].lower() == "available":
+            badge = '<span class="badge-available">Available</span>'
+        elif p["status"].lower() == "reserved":
+            badge = '<span class="badge-reserved">Reserved</span>'
 
-    meta = " · ".join([v for v in [p["gender"]] if v])
+        meta = " · ".join([v for v in [p["gender"]] if v])
 
-    with st.container():
-        st.markdown('<div class="puppy-card">', unsafe_allow_html=True)
-        st.markdown('<div class="card" style="padding:14px;">', unsafe_allow_html=True)
-        photo_block(p['key'], height=130, radius=16, label=p['name'])
-        st.markdown(f"""
-            <div class="puppy-name">{p['name']}</div>
-            <div class="puppy-meta">{meta}</div>
-            {badge}
-        </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-st.markdown('</div>', unsafe_allow_html=True)
-st.markdown('</div>', unsafe_allow_html=True)
+        with col:
+            st.markdown('<div class="card" style="padding:22px;">', unsafe_allow_html=True)
+            photo_block(p['key'], height=200, radius=16, label=p['name'])
+            st.markdown(f"""
+                <div style="margin-top:18px;">
+                    <div class="puppy-name">{p['name']}</div>
+                    <div class="puppy-meta">{meta}</div>
+                    {badge}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
 
 # ---------------------------------------------------------------------------
 # ABOUT
