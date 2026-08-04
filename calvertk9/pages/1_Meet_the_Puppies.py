@@ -37,6 +37,18 @@ def find_image(name):
     return None
 
 
+def render_html(html):
+    """st.markdown(..., unsafe_allow_html=True) but safe against Python
+    source indentation. If the HTML we build is indented (because it sits
+    inside a for-loop or a `with column:` block), Markdown treats those
+    leading spaces as a code block and prints tags like `</div>` as literal
+    text instead of rendering them. Stripping leading whitespace from every
+    line avoids that.
+    """
+    lines = [line.lstrip() for line in html.strip().split("\n")]
+    st.markdown("\n".join(lines), unsafe_allow_html=True)
+
+
 def photo_block(name, height=280, radius=22):
     """Renders a clean, fixed-size photo in a rounded box.
     Falls back to a plain empty box (no text/paths shown) if the photo
@@ -65,7 +77,7 @@ def photo_block(name, height=280, radius=22):
     )
 
 
-st.markdown("""
+render_html("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -159,12 +171,12 @@ h1,h2,h3,h4{font-family:'Fraunces', serif; letter-spacing:-0.02em;}
     .puppy-card{flex:0 0 100%;}
 }
 </style>
-""", unsafe_allow_html=True)
+""")
 
 # ---------------------------------------------------------------------------
 # NAVBAR
 # ---------------------------------------------------------------------------
-st.markdown("""
+render_html("""
 <div class="navbar">
     <a href="#top" class="nav-logo">CalvertK9</a>
     <div class="nav-links">
@@ -175,16 +187,16 @@ st.markdown("""
     </div>
 </div>
 <div id="top"></div>
-""", unsafe_allow_html=True)
+""")
 
 # ---------------------------------------------------------------------------
 # HERO
 # ---------------------------------------------------------------------------
-st.markdown('<div class="hero-wrap">', unsafe_allow_html=True)
+render_html('<div class="hero-wrap">')
 col1, col2 = st.columns([1.1, 1], gap="large")
 
 with col1:
-    st.markdown("""
+    render_html("""
     <div class="hero-badge">Home-raised · Health-tested parents</div>
     <div class="hero-title">CalvertK9</div>
     <div class="hero-sub">
@@ -195,27 +207,27 @@ with col1:
         <a href="#puppies" class="btn-primary">Meet the puppies</a>
         <a href="#contact" class="btn-ghost">Get in touch</a>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
 with col2:
-    st.markdown(photo_block("hero", height=520), unsafe_allow_html=True)
+    render_html(photo_block("hero", height=520))
 
-st.markdown('</div>', unsafe_allow_html=True)
+render_html('</div>')
 
 # ---------------------------------------------------------------------------
 # MEET THE PARENTS
 # ---------------------------------------------------------------------------
-st.markdown('<div id="parents" class="section">', unsafe_allow_html=True)
-st.markdown("""
+render_html('<div id="parents" class="section">')
+render_html("""
 <div class="section-kicker">Meet the Parents</div>
 <div class="section-title">Marley and Bertie</div>
 <div class="section-sub">Loved family dogs and the proud parents of this litter.</div>
-""", unsafe_allow_html=True)
+""")
 
 colM, colB = st.columns(2, gap="large")
 
 with colM:
-    st.markdown(f"""
+    render_html(f"""
         <div class="card" style="padding:28px;">
             {photo_block("marley", height=420)}
             <span class="tag">Mum</span>
@@ -223,10 +235,10 @@ with colM:
             <div class="dog-meta">A gentle, affectionate mum who has taken wonderful care of her litter.</div>
             <div class="dog-meta"><strong>Health:</strong> Add health testing details here.</div>
         </div>
-    """, unsafe_allow_html=True)
+    """)
 
 with colB:
-    st.markdown(f"""
+    render_html(f"""
         <div class="card" style="padding:28px;">
             {photo_block("bertie", height=420)}
             <span class="tag tag-muted">Dad</span>
@@ -234,19 +246,19 @@ with colB:
             <div class="dog-meta">A friendly, easy-going dad with a lovely temperament.</div>
             <div class="dog-meta"><strong>Health:</strong> Add health testing details here.</div>
         </div>
-    """, unsafe_allow_html=True)
+    """)
 
-st.markdown('</div>', unsafe_allow_html=True)
+render_html('</div>')
 
 # ---------------------------------------------------------------------------
 # MEET THE PUPPIES
 # ---------------------------------------------------------------------------
-st.markdown('<div id="puppies" class="section section-alt">', unsafe_allow_html=True)
-st.markdown("""
+render_html('<div id="puppies" class="section section-alt">')
+render_html("""
 <div class="section-kicker">Meet the Puppies</div>
 <div class="section-title">Marley and Bertie's litter</div>
 <div class="section-sub">Seven happy, home-raised puppies. Get in touch if one has caught your eye.</div>
-""", unsafe_allow_html=True)
+""")
 
 # Edit the details below once puppies are named / have known genders or status.
 puppies = [
@@ -259,10 +271,18 @@ puppies = [
     {"key": "puppy7", "name": "Puppy 7", "gender": "", "status": ""},
 ]
 
-for i in range(0, len(puppies), 3):
-    row = puppies[i:i+3]
-    cols = st.columns(len(row), gap="large")
-    for col, p in zip(cols, row):
+PUPPY_COLS = 3
+for i in range(0, len(puppies), PUPPY_COLS):
+    row = puppies[i:i + PUPPY_COLS]
+    # Always create the full number of columns, even on the last, shorter
+    # row — otherwise a lone puppy (e.g. puppy 7) gets a column that
+    # stretches to the full row width and looks oversized.
+    cols = st.columns(PUPPY_COLS, gap="large")
+    for idx, col in enumerate(cols):
+        if idx >= len(row):
+            continue  # leave this column empty to preserve equal widths
+
+        p = row[idx]
         badge = ""
         if p["status"].lower() == "available":
             badge = '<span class="badge-available">Available</span>'
@@ -272,7 +292,7 @@ for i in range(0, len(puppies), 3):
         meta = " · ".join([v for v in [p["gender"]] if v])
 
         with col:
-            st.markdown(f"""
+            render_html(f"""
                 <div class="card" style="padding:22px;">
                     {photo_block(p['key'], height=200, radius=16)}
                     <div style="margin-top:18px;">
@@ -281,13 +301,13 @@ for i in range(0, len(puppies), 3):
                         {badge}
                     </div>
                 </div>
-            """, unsafe_allow_html=True)
+            """)
 
 # ---------------------------------------------------------------------------
 # ABOUT
 # ---------------------------------------------------------------------------
-st.markdown('<div id="about" class="section">', unsafe_allow_html=True)
-st.markdown("""
+render_html('<div id="about" class="section">')
+render_html("""
 <div class="section-kicker">About CalvertK9</div>
 <div class="section-title">A family-raised litter, cared for from day one</div>
 <div class="section-sub">
@@ -295,7 +315,7 @@ st.markdown("""
     from birth. We're happy to answer any questions about their upbringing, health
     and temperament.
 </div>
-""", unsafe_allow_html=True)
+""")
 
 features = [
     ("Raised at home", "The puppies have grown up as part of our family, not in a kennel."),
@@ -303,7 +323,7 @@ features = [
     ("Happy and healthy", "Well-fed, well-loved, and ready for their new homes."),
 ]
 for title, desc in features:
-    st.markdown(f"""
+    render_html(f"""
     <div class="feature-row">
         <div class="feature-badge">•</div>
         <div>
@@ -311,28 +331,28 @@ for title, desc in features:
             <div class="feature-desc">{desc}</div>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
-st.markdown('</div>', unsafe_allow_html=True)
+render_html('</div>')
 
 # ---------------------------------------------------------------------------
 # CONTACT — simple: just a button and a phone number
 # ---------------------------------------------------------------------------
-st.markdown('<div id="contact" class="section section-alt">', unsafe_allow_html=True)
+render_html('<div id="contact" class="section section-alt">')
 
-st.markdown("""
+render_html("""
 <div class="contact-simple">
     <a href="mailto:replacewithrealemail@gmail.com" class="btn-primary" style="display:inline-flex; align-items:center; gap:10px;">
         📧 Contact us
     </a>
     <div class="contact-phone">Or call us directly at <strong>07777777777</strong></div>
 </div>
-""", unsafe_allow_html=True)
+""")
 
-st.markdown('</div>', unsafe_allow_html=True)
+render_html('</div>')
 
-st.markdown("""
+render_html("""
 <div class="footer">
     <b>CalvertK9</b> — Home-raised puppies from health-tested parents.
 </div>
-""", unsafe_allow_html=True)
+""")
