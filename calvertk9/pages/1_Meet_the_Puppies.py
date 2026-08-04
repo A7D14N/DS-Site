@@ -36,11 +36,13 @@ def find_image(name):
 
 
 
-def photo_block(name, height=280, radius=22, label=None):
+def photo_block(name, height=280, radius=22, label=None, width=None):
     path = find_image(name)
 
     if path:
-        st.image(path, width=min(height, 260))
+        if width is None:
+            width = int(height * 1.5)
+        st.image(path, width=width)
     else:
         st.markdown(
             f"""
@@ -127,8 +129,8 @@ h1,h2,h3,h4{font-family:'Fraunces', serif; letter-spacing:-0.02em;}
 .dog-name{font-family:'Fraunces', serif; font-size:22px; font-weight:700; margin:14px 0 6px 0; color:#000;}
 .dog-meta{color:#000; font-size:14px; margin-bottom:10px; line-height:1.65;}
 
-.puppy-grid{display:flex; flex-wrap:wrap; gap:18px; justify-content:center;}
-.puppy-card{flex:0 0 22%; min-width:180px;}
+.puppy-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:18px; justify-items:center; width:100%; max-width:1100px; margin:0 auto;}
+.puppy-card{width:100%; min-width:0;}
 .puppy-name{font-family:'Fraunces', serif; font-size:17px; font-weight:700; margin:12px 0 4px 0; color:#000;}
 .puppy-meta{color:#000; font-size:13px;}
 .badge-available{display:inline-block; background:#DCE8DC; color:#2F5A2F; font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; margin-top:8px;}
@@ -194,7 +196,7 @@ with col1:
     """, unsafe_allow_html=True)
 
 with col2:
-    photo_block("hero", height=260, label="Hero photo")
+    photo_block("hero", height=360, label="Hero photo")
 
 st.markdown('</div>', unsafe_allow_html=True)
 
@@ -213,7 +215,7 @@ colM, colB = st.columns(2, gap="large")
 with colM:
     with st.container():
         st.markdown('<div class="card">', unsafe_allow_html=True)
-        photo_block("marley", height=200, label="Marley")
+        photo_block("marley", height=280, label="Marley")
         st.markdown("""
             <span class="tag">Mum</span>
             <div class="dog-name">Marley</div>
@@ -225,7 +227,7 @@ with colM:
 with colB:
     with st.container():
         st.markdown('<div class="card">', unsafe_allow_html=True)
-        photo_block("bertie", height=200, label="Bertie")
+        photo_block("bertie", height=280, label="Bertie")
         st.markdown("""
             <span class="tag tag-muted">Dad</span>
             <div class="dog-name">Bertie</div>
