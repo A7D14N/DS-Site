@@ -17,13 +17,13 @@ inject_base_styles()
 render_html("""
 <style>
 .home-simple{
-    min-height:82vh;
+    min-height:auto;
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:center;
+    justify-content:flex-start;
     text-align:center;
-    padding:56px 24px 8px 24px;
+    padding:24px 24px 16px 24px;
     box-sizing:border-box;
 }
 .home-simple-crest{
