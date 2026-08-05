@@ -189,7 +189,7 @@ h1,h2,h3,h4{font-family:'Fraunces', serif; letter-spacing:-0.01em;}
 
 /* Home page — full-bleed hero */
 .home-hero{position:relative; width:100%; height:92vh; min-height:560px; display:flex; align-items:center; justify-content:center; overflow:hidden;}
-.home-hero-bg{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0;}
+.home-hero-bg{position:absolute; inset:0; top:0; left:0; width:100%; height:100%; display:block; object-fit:cover; z-index:0;}
 .home-hero-placeholder{position:absolute; inset:0; width:100%; height:100%; background:linear-gradient(180deg, #C9B79A 0%, #EDE3D4 100%); z-index:0;}
 .home-hero::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,16,12,0.38) 0%, rgba(20,16,12,0.55) 100%); z-index:1;}
 .home-hero-content{position:relative; z-index:2; text-align:center; color:#FFFFFF; padding:0 24px; max-width:720px;}
