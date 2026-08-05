@@ -188,9 +188,8 @@ h1,h2,h3,h4{font-family:'Fraunces', serif; letter-spacing:-0.01em;}
 .footer b{color:var(--ink);}
 
 /* Home page — full-bleed hero */
-.home-hero{position:relative; width:100%; height:100vh; min-height:560px; display:flex; align-items:center; justify-content:center; overflow:hidden;}
+.home-hero{position:relative; width:100%; height:100vh; min-height:560px; display:flex; align-items:center; justify-content:center; overflow:hidden; background:linear-gradient(180deg, #C9B79A 0%, #EDE3D4 100%); background-size:cover; background-position:center;}
 .home-hero-bg{position:absolute; inset:0; top:0; left:0; width:100%; height:100%; min-width:100%; min-height:100%; max-width:none; max-height:none; display:block; object-fit:cover; z-index:0;}
-.home-hero-placeholder{position:absolute; inset:0; width:100%; height:100%; background:linear-gradient(180deg, #C9B79A 0%, #EDE3D4 100%); z-index:0;}
 .home-hero::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,16,12,0.38) 0%, rgba(20,16,12,0.55) 100%); z-index:1;}
 .home-hero-content{position:relative; z-index:2; text-align:center; color:#FFFFFF; padding:0 24px; max-width:720px;}
 .home-crest{width:52px; height:52px; border-radius:50%; border:1.5px solid rgba(255,255,255,0.85); display:flex; align-items:center; justify-content:center; font-family:'Fraunces', serif; font-weight:700; font-size:15px; letter-spacing:0.02em; margin:0 auto 22px auto;}
