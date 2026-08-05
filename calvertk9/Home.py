@@ -20,17 +20,15 @@ inject_base_styles()
 # Until it's added, a soft placeholder is shown so the page still runs.
 # ---------------------------------------------------------------------------
 hero_path = find_image("home_hero")
+hero_style = ""
 if hero_path:
     ext = os.path.splitext(hero_path)[1].lstrip(".")
     with open(hero_path, "rb") as f:
         b64 = base64.b64encode(f.read()).decode()
-    hero_bg_html = f'<img class="home-hero-bg" src="data:image/{ext};base64,{b64}" alt="CalvertK9" />'
-else:
-    hero_bg_html = '<div class="home-hero-placeholder"></div>'
+    hero_style = f'background-image:url(data:image/{ext};base64,{b64});'
 
 render_html(f"""
-<div class="home-hero">
-    {hero_bg_html}
+<div class="home-hero" style="{hero_style}">
     <div class="home-hero-content">
         <div class="home-crest">CK9</div>
         <div class="home-hint">Chelmsford, Essex &middot; KC Registered Maltese</div>
